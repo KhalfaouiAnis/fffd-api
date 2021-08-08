@@ -2,53 +2,56 @@ package com.tekup.restapi.restapi.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.sun.istack.NotNull;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements Serializable {
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
 	@Column(length = 50)
-	private Date creationDate ;
-	
-	@Column(length = 50, name = "role")
-	private String role;
-	
+	private Date creationDate;
+
 	@Column(length = 50)
 	private String firstName;
-	
+
 	@Column(length = 50)
 	private String lastName;
-	
-	@Column(length = 50)
+
+	@Column(length = 40, nullable = false, unique = true)
+	private String username;
+
+	@Column(length = 128, nullable = false, unique = true)
 	private String email;
-	
-	@Column()
+
+	@Column(length = 64, nullable = false)
 	private String password;
-	
+
 	@Column(length = 50)
 	private String phoneNumber;
-	
+
 	@Column(length = 50)
 	private String address;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Restaurant restaurant;
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
 	public Date getCreationDate() {
 		return creationDate;
@@ -72,6 +75,14 @@ public class User implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -106,12 +117,25 @@ public class User implements Serializable {
 		this.address = address;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
-	}	
+	}
 
-	public User(String role, String email, String password) {
-		this.role = role;
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public User(String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
+	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
 	}
@@ -123,14 +147,9 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public User(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
-
-	public User(String role, String firstName, String lastName, String email, String phoneNumber,
-			String password, String address) {
-		this.role = role;
+	public User(String username, String firstName, String lastName, String email, String phoneNumber, String password,
+			String address) {
+		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -139,7 +158,17 @@ public class User implements Serializable {
 		this.address = address;
 	}
 
-	public User() {}
+	public User() {
+	}
 
-	
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", phoneNumber=" + phoneNumber
+				+ ", address=" + address + ", roles=" + roles + "]";
+	}
+
 }
