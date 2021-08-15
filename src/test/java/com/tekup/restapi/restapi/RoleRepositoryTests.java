@@ -11,9 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.tekup.restapi.restapi.models.Role;
-import com.tekup.restapi.restapi.models.RoleName;
-import com.tekup.restapi.restapi.repositories.RoleRepository;
+import com.tekup.restapi.models.Role;
+import com.tekup.restapi.repositories.RoleRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -24,7 +23,7 @@ public class RoleRepositoryTests {
 	
 	@Test
 	public void testCreateFirstRole() {
-		Role adminRole = new Role(RoleName.ADMIN);
+		Role adminRole = new Role("ADMIN");
 		Role saveRole = repo.save(adminRole);
 		
 		assertThat(saveRole.getId()).isGreaterThan(0);
@@ -33,9 +32,9 @@ public class RoleRepositoryTests {
 	@Test
 	public void testCreateRestRoles() {
 		List<Role> roles = new ArrayList<Role>();
-		roles.add(new Role(RoleName.RESTAURANT_MANAGER));
-		roles.add(new Role(RoleName.CLIENT));
-		roles.add(new Role(RoleName.DELIVERY_MAN));		
+		roles.add(new Role("RESTAURANT_MANAGER"));
+		roles.add(new Role("CLIENT"));
+		roles.add(new Role("DELIVERY_MAN"));		
 		repo.saveAll(roles);
 	}
 	

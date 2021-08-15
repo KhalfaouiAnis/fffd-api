@@ -11,10 +11,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import com.tekup.restapi.restapi.models.Role;
-import com.tekup.restapi.restapi.models.RoleName;
-import com.tekup.restapi.restapi.models.User;
-import com.tekup.restapi.restapi.repositories.UserRepository;
+import com.tekup.restapi.models.Role;
+import com.tekup.restapi.models.User;
+import com.tekup.restapi.repositories.UserRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -40,8 +39,8 @@ public class UserRepositoryTests {
 	@Test
 	public void testCreatetNewUserWithTwoRoles() {
 		User john = new User("John", "Doe", "john.doe@tek-up.de", "123456");
-		Role roleRestaurantMngr = new Role(RoleName.RESTAURANT_MANAGER);
-		Role roleShipper = new Role(RoleName.DELIVERY_MAN);
+		Role roleRestaurantMngr = new Role("RESTAURANT_MANAGER");
+		Role roleShipper = new Role("DELIVERY_MAN");
 		john.addRole(roleRestaurantMngr);
 		john.addRole(roleShipper);
 
@@ -50,36 +49,36 @@ public class UserRepositoryTests {
 		assertThat(savedUser.getId()).isGreaterThan(0);
 
 	}
-	
+
 	@Test
 	public void testListAllUsers() {
 		Iterable<User> listUsers = repo.findAll();
 		listUsers.forEach(user -> System.out.println(user));
 	}
-	
+
 	@Test
 	public void testGetUserById() {
 		User user = repo.findById(1).get();
-		assertThat(user.getUsername()).isNotNull();
+		assertThat(user.getEmail()).isNotNull();
 	}
-	
+
 	@Test
 	public void testUpdateUserDetails() {
 		User user = repo.findById(1).get();
 		user.setPhoneNumber("23365342");
 		User savedUser = repo.save(user);
 	}
-	
+
 	@Test
 	public void testUpdateUserRoles() {
 		User user = repo.findById(1).get();
-		Role roleRestaurantMngr = new Role(RoleName.RESTAURANT_MANAGER);
-		Role roleShipper = new Role(RoleName.DELIVERY_MAN);
+		Role roleRestaurantMngr = new Role("RESTAURANT_MANAGER");
+		Role roleShipper = new Role("DELIVERY_MAN");
 		user.getRoles().remove(roleRestaurantMngr);
 		user.addRole(roleShipper);
 		User savedUser = repo.save(user);
 	}
-	
+
 	@Test
 	public void testDeleteUse() {
 		Integer userId = 2;
