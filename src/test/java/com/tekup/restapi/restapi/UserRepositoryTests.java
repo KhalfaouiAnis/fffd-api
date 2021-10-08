@@ -2,8 +2,6 @@ package com.tekup.restapi.restapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,9 +9,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import com.tekup.restapi.models.Role;
-import com.tekup.restapi.models.User;
-import com.tekup.restapi.repositories.UserRepository;
+import com.tekup.restapi.app.models.Role;
+import com.tekup.restapi.app.models.User;
+import com.tekup.restapi.app.repositories.UserRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -66,7 +64,7 @@ public class UserRepositoryTests {
 	public void testUpdateUserDetails() {
 		User user = repo.findById(1).get();
 		user.setPhoneNumber("23365342");
-		User savedUser = repo.save(user);
+		repo.save(user);
 	}
 
 	@Test
@@ -76,7 +74,7 @@ public class UserRepositoryTests {
 		Role roleShipper = new Role("DELIVERY_MAN");
 		user.getRoles().remove(roleRestaurantMngr);
 		user.addRole(roleShipper);
-		User savedUser = repo.save(user);
+		repo.save(user);
 	}
 
 	@Test

@@ -11,8 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.tekup.restapi.models.Role;
-import com.tekup.restapi.repositories.RoleRepository;
+import com.tekup.restapi.app.models.Role;
+import com.tekup.restapi.app.repositories.RoleRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
